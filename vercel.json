@@ -3,7 +3,7 @@
     "framework": null,
     "functions": {
         "api/index.php": {
-            "runtime": "vercel-php@0.7.3"
+            "runtime": "vercel-php@0.7.4"
         }
     },
     "routes": [
@@ -12,6 +12,6 @@
             "dest": "/api/index.php"
         }
     ],
-    "buildCommand": "npm run build",
+    "buildCommand": "composer install --no-dev --optimize-autoloader && npm install && npm run build",
     "outputDirectory": "public"
 }
