@@ -12,32 +12,50 @@
 
 body {
     background-color: var(--cream);
+    color: var(--navy);
 }
 
+/* Main page background */
+.luxury-page {
+    background-color: var(--cream);
+    min-height: 100vh;
+    color: var(--navy);
+}
+
+/* Navbar */
 .luxury-navbar {
     background-color: var(--navy) !important;
-    color: white !important;
+    border-bottom: 3px solid var(--gold);
+    color: var(--gold) !important;
 }
 
 .luxury-brand {
     color: var(--gold) !important;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.5px;
 }
 
 .luxury-link {
-    color: white !important;
+    color: var(--gold) !important;
+    font-weight: 600;
+    text-decoration: none;
 }
 
 .luxury-link:hover {
-    color: var(--gold) !important;
+    color: var(--light-gold) !important;
+}
+
+/* Headings and cards */
+.luxury-heading {
+    color: var(--navy);
+    font-weight: 800;
 }
 
 .luxury-card {
     background-color: white;
     border: 1px solid #e5e0d0;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(11, 31, 58, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(11, 31, 58, 0.10);
 }
 
 .luxury-card-title {
@@ -49,37 +67,113 @@ body {
     color: var(--gold);
 }
 
+/* Buttons */
+.btn-luxury,
 .luxury-btn {
     background-color: var(--gold) !important;
     color: var(--navy) !important;
-    padding: 10px 16px;
+    padding: 10px 18px;
     border-radius: 8px;
-    font-weight: 600;
-    display: inline-block;
+    font-weight: 700;
     text-decoration: none;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1.2;
 }
 
+.btn-luxury:hover,
 .luxury-btn:hover {
     background-color: var(--light-gold) !important;
     color: var(--dark-navy) !important;
 }
 
+.btn-navy,
 .luxury-btn-navy {
     background-color: var(--navy) !important;
     color: white !important;
-    padding: 10px 16px;
+    padding: 10px 18px;
     border-radius: 8px;
-    font-weight: 600;
-    display: inline-block;
+    font-weight: 700;
     text-decoration: none;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1.2;
 }
 
+.btn-navy:hover,
 .luxury-btn-navy:hover {
     background-color: var(--dark-navy) !important;
     color: var(--gold) !important;
 }
 
-.luxury-heading {
+/* Tables */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.luxury-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+.luxury-table th {
+    background-color: var(--navy);
+    color: var(--gold);
+    padding: 14px;
+    text-align: left;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 1px solid #e5e0d0;
+}
+
+.luxury-table td {
+    padding: 14px;
+    border: 1px solid #e5e0d0;
     color: var(--navy);
-    font-weight: 800;
+    vertical-align: middle;
+}
+
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.table-actions form {
+    margin: 0;
+}
+
+/* Room image cards */
+.room-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+}
+
+.no-image-box {
+    width: 100%;
+    height: 220px;
+    background-color: #e5e0d0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--navy);
+    font-weight: 700;
+}
+
+/* Optional layout helpers */
+.page-container {
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem 1rem;
 }
