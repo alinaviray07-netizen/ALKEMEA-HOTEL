@@ -16,6 +16,11 @@ class ReservationController extends Controller
      */
     public function index()
     {
+        // If admin opens My Reservations, redirect to admin reservations
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.reservations.index');
+        }
+
         $reservations = Reservation::with(['room', 'payment'])
             ->where('user_id', Auth::id())
             ->latest()
@@ -29,6 +34,13 @@ class ReservationController extends Controller
      */
     public function create(Request $request)
     {
+        // Admin should not reserve rooms
+        if (Auth::user()->role === 'admin') {
+            return redirect()
+                ->route('admin.dashboard')
+                ->with('error', 'Admins cannot make room reservations.');
+        }
+
         $room = Room::findOrFail($request->room_id);
 
         return view('reservations.create', compact('room'));
@@ -39,6 +51,13 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
+        // Admin should not submit reservations
+        if (Auth::user()->role === 'admin') {
+            return redirect()
+                ->route('admin.dashboard')
+                ->with('error', 'Admins cannot make room reservations.');
+        }
+
         $request->validate([
             'room_id' => 'required|exists:rooms,id',
             'check_in_date' => 'required|date|after_or_equal:today',
@@ -99,6 +118,12 @@ class ReservationController extends Controller
      */
     public function destroy(Reservation $reservation)
     {
+        if (Auth::user()->role === 'admin') {
+            return redirect()
+                ->route('admin.reservations.index')
+                ->with('error', 'Admins cannot cancel reservations from the guest side.');
+        }
+
         if ($reservation->user_id !== Auth::id()) {
             abort(403);
         }
