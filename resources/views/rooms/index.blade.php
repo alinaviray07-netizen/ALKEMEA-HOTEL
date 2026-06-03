@@ -2,15 +2,15 @@
 
 @section('content')
 <div class="luxury-page">
-    <div class="max-w-7xl mx-auto py-8 px-4">
-        <div class="mb-8">
-            <h1 class="luxury-heading text-3xl">ALKEMEA Hotel</h1>
-            <p class="text-gray-600 mt-2">
+    <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <div class="mb-10">
+            <h1 class="luxury-heading text-3xl mb-3">ALKEMEA Hotel</h1>
+            <p class="text-gray-600">
                 Browse available rooms and choose the best room for your stay.
             </p>
         </div>
 
-        <h2 class="luxury-heading text-2xl mb-6">Available Rooms</h2>
+        <h2 class="luxury-heading text-2xl mb-8">Available Rooms</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($rooms as $room)
@@ -18,27 +18,27 @@
                     @if($room->image)
                         <img src="{{ asset('storage/' . $room->image) }}"
                              alt="{{ $room->room_type }}"
-                             style="width: 100%; height: 220px; object-fit: cover;">
+                             class="room-image">
                     @else
-                        <div style="width: 100%; height: 220px; background-color: #e5e0d0; display: flex; align-items: center; justify-content: center; color: #0B1F3A; font-weight: 700;">
+                        <div class="no-image-box">
                             No Image Available
                         </div>
                     @endif
 
                     <div class="p-6">
-                        <h3 class="luxury-card-title text-xl mb-3">
+                        <h3 class="luxury-card-title text-xl mb-4">
                             {{ $room->room_type }}
                         </h3>
 
-                        <p class="mb-1">
+                        <p class="mb-2">
                             <strong>Room Number:</strong> {{ $room->room_number }}
                         </p>
 
-                        <p class="mb-1">
+                        <p class="mb-2">
                             <strong>Capacity:</strong> {{ $room->capacity }} guest/s
                         </p>
 
-                        <p class="mb-1">
+                        <p class="mb-2">
                             <strong>Rate:</strong>
                             <span class="luxury-gold-text font-bold">
                                 ₱{{ number_format($room->price, 2) }}
@@ -46,7 +46,7 @@
                             per night
                         </p>
 
-                        <p class="mb-4">
+                        <p class="mb-5">
                             <strong>Status:</strong> {{ ucfirst($room->status) }}
                         </p>
 
