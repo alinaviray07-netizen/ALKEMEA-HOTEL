@@ -11,12 +11,8 @@ use Carbon\Carbon;
 
 class ReservationController extends Controller
 {
-    /**
-     * Guest: View own reservations.
-     */
     public function index()
     {
-        // If admin opens My Reservations, redirect to admin reservations
         if (Auth::user()->role === 'admin') {
             return redirect()->route('admin.reservations.index');
         }
@@ -29,12 +25,8 @@ class ReservationController extends Controller
         return view('reservations.index', compact('reservations'));
     }
 
-    /**
-     * Guest: Show reservation form.
-     */
     public function create(Request $request)
     {
-        // Admin should not reserve rooms
         if (Auth::user()->role === 'admin') {
             return redirect()
                 ->route('admin.dashboard')
@@ -46,12 +38,8 @@ class ReservationController extends Controller
         return view('reservations.create', compact('room'));
     }
 
-    /**
-     * Guest: Store new reservation.
-     */
     public function store(Request $request)
     {
-        // Admin should not submit reservations
         if (Auth::user()->role === 'admin') {
             return redirect()
                 ->route('admin.dashboard')
@@ -99,9 +87,6 @@ class ReservationController extends Controller
             ->with('success', 'Reservation submitted successfully. Please wait for admin approval.');
     }
 
-    /**
-     * Guest/Admin: View reservation details.
-     */
     public function show(Reservation $reservation)
     {
         if ($reservation->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
@@ -113,9 +98,6 @@ class ReservationController extends Controller
         return view('reservations.show', compact('reservation'));
     }
 
-    /**
-     * Guest: Cancel own pending reservation.
-     */
     public function destroy(Reservation $reservation)
     {
         if (Auth::user()->role === 'admin') {
@@ -141,9 +123,6 @@ class ReservationController extends Controller
             ->with('success', 'Reservation cancelled successfully.');
     }
 
-    /**
-     * Admin: View all reservations.
-     */
     public function adminIndex()
     {
         $reservations = Reservation::with(['user', 'room', 'payment'])
@@ -153,9 +132,6 @@ class ReservationController extends Controller
         return view('admin.reservations.index', compact('reservations'));
     }
 
-    /**
-     * Admin: Approve reservation.
-     */
     public function approve(Reservation $reservation)
     {
         $reservation->update([
@@ -174,9 +150,6 @@ class ReservationController extends Controller
             ->with('success', 'Reservation approved successfully.');
     }
 
-    /**
-     * Admin: Reject reservation.
-     */
     public function reject(Reservation $reservation)
     {
         $reservation->update([

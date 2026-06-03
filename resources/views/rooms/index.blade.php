@@ -50,9 +50,21 @@
                             <strong>Status:</strong> {{ ucfirst($room->status) }}
                         </p>
 
-                        <a href="{{ route('rooms.show', $room) }}" class="btn-navy">
-                            View Details
-                        </a>
+                        @auth
+                            @if(auth()->user()->role === 'admin')
+                                <a href="{{ route('admin.dashboard') }}" class="btn-navy">
+                                    Admin Dashboard
+                                </a>
+                            @else
+                                <a href="{{ route('rooms.show', $room) }}" class="btn-navy">
+                                    View Details
+                                </a>
+                            @endif
+                        @else
+                            <a href="{{ route('rooms.show', $room) }}" class="btn-navy">
+                                View Details
+                            </a>
+                        @endauth
                     </div>
                 </div>
             @empty
