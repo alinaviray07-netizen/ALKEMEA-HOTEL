@@ -11,15 +11,20 @@ class RoomController extends Controller
     /**
      * Display available rooms for guests/public homepage.
      */
-    public function index()
-    {
-        $rooms = Room::where('status', 'available')
-            ->latest()
-            ->get();
+   public function index()
+{
+    $rooms = Room::where('status', 'available')
+        ->latest()
+        ->get();
 
-        return view('rooms.index', compact('rooms'));
-    }
+    $availableRoomGroups = Room::where('status', 'available')
+        ->orderBy('room_type')
+        ->orderBy('room_number')
+        ->get()
+        ->groupBy('room_type');
 
+    return view('rooms.index', compact('rooms', 'availableRoomGroups'));
+}
     /**
      * Display all rooms for admin.
      */

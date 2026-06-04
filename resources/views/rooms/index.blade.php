@@ -6,10 +6,49 @@
         <div class="mb-10">
             <h1 class="luxury-heading text-3xl mb-3">ALKEMEA Hotel</h1>
             <p class="text-gray-600">
-                Browse available rooms and choose the best room for your stay.
+                Browse available rooms, choose a specific room, and reserve your stay.
             </p>
         </div>
 
+        {{-- Room Availability Summary --}}
+        <div class="mb-10">
+            <h2 class="luxury-heading text-2xl mb-6">Room Availability</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @forelse($availableRoomGroups as $roomType => $groupedRooms)
+                    <div class="luxury-card p-6">
+                        <h3 class="luxury-card-title text-xl mb-2">
+                            {{ $roomType }}
+                        </h3>
+
+                        <p class="mb-4">
+                            <span class="luxury-gold-text font-bold text-2xl">
+                                {{ $groupedRooms->count() }}
+                            </span>
+                            available room/s
+                        </p>
+
+                        <p class="font-semibold mb-2">Available Room Numbers:</p>
+
+                        <div class="flex flex-wrap gap-2">
+                            @foreach($groupedRooms as $availableRoom)
+                                <a href="{{ route('rooms.show', $availableRoom) }}"
+                                   class="btn-navy"
+                                   style="padding: 7px 12px; font-size: 14px;">
+                                    Room {{ $availableRoom->room_number }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @empty
+                    <div class="luxury-card p-6">
+                        <p>No available rooms at the moment.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
+        {{-- Room Cards --}}
         <h2 class="luxury-heading text-2xl mb-8">Available Rooms</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
