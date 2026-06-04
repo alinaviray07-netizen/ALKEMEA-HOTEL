@@ -1,7 +1,14 @@
 # Hotel Reservation System
 
+## Developers
+
+- Alina Viray
+- Andrea Dela Cruz
+- Kemerson Fernandez
+
 ## Project Title
 Hotel Reservation System
+
 
 ## Project Description
 The Hotel Reservation System is a Laravel-based web application that allows guests to view available hotel rooms, reserve rooms, and check their booking status. It also includes an admin side where the admin can manage rooms, manage reservations, track payments, and view reports.
