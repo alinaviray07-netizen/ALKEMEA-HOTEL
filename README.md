@@ -90,6 +90,9 @@ POST /api/payments
 PATCH /api/payments/{payment}  
 DELETE /api/payments/{payment}
 
+# LINK OF DEPLOYMENT USING RENDER - https://alkemea-hotel.onrender.com/
+# LOCAL, LARAVEL LINK - http://127.0.0.1:8000/
+
 ## Setup Instructions
 
 1. Clone the repository:
