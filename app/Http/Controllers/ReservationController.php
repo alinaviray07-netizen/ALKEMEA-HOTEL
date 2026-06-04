@@ -35,6 +35,12 @@ class ReservationController extends Controller
 
         $room = Room::findOrFail($request->room_id);
 
+        if ($room->status !== 'available') {
+            return redirect()
+                ->route('home')
+                ->with('error', 'This room is no longer available.');
+        }
+
         return view('reservations.create', compact('room'));
     }
 
@@ -134,6 +140,14 @@ class ReservationController extends Controller
 
     public function approve(Reservation $reservation)
     {
+        $reservation->load(['room', 'payment']);
+
+        if ($reservation->room && $reservation->room->status !== 'available') {
+            return redirect()
+                ->route('admin.reservations.index')
+                ->with('error', 'This room is already unavailable.');
+        }
+
         $reservation->update([
             'status' => 'approved',
         ]);
@@ -145,13 +159,21 @@ class ReservationController extends Controller
             ]);
         }
 
+        if ($reservation->room) {
+            $reservation->room->update([
+                'status' => 'unavailable',
+            ]);
+        }
+
         return redirect()
             ->route('admin.reservations.index')
-            ->with('success', 'Reservation approved successfully.');
+            ->with('success', 'Reservation approved successfully. The room is now unavailable.');
     }
 
     public function reject(Reservation $reservation)
     {
+        $reservation->load(['room', 'payment']);
+
         $reservation->update([
             'status' => 'rejected',
         ]);
@@ -163,8 +185,14 @@ class ReservationController extends Controller
             ]);
         }
 
+        if ($reservation->room) {
+            $reservation->room->update([
+                'status' => 'available',
+            ]);
+        }
+
         return redirect()
             ->route('admin.reservations.index')
-            ->with('success', 'Reservation rejected successfully.');
+            ->with('success', 'Reservation rejected successfully. The room is available again.');
     }
 }
