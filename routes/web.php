@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', [RoomController::class, 'index'])->name('home');
+Route::get('/rooms/type/{roomType}', [RoomController::class, 'showByType'])->name('rooms.type.show');
 Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
-
 /*
 |--------------------------------------------------------------------------
 | Dashboard Redirect
@@ -33,42 +33,26 @@ Route::get('/dashboard', function () {
     return redirect()->route('reservations.index');
 })->middleware(['auth'])->name('dashboard');
 
-/*
-|--------------------------------------------------------------------------
-| Guest Routes
-|--------------------------------------------------------------------------
-*/
+/*Guest Routes*/
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/my-reservations', [ReservationController::class, 'index'])
-        ->name('reservations.index');
+    Route::get('/my-reservations', [ReservationController::class, 'index'])->name('reservations.index');
 
-    Route::get('/reservations/create', [ReservationController::class, 'create'])
-        ->name('reservations.create');
+    Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
 
-    Route::post('/reservations', [ReservationController::class, 'store'])
-        ->name('reservations.store');
+    Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
 
-    Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])
-        ->name('reservations.show');
+    Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
 
-    Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])
-        ->name('reservations.destroy');
+    Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Breeze Profile Routes
-    |--------------------------------------------------------------------------
-    */
+    /*Breeze Profile Routes */
 
-    Route::get('/profile', [ProfileController::class, 'edit'])
-        ->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
-    Route::patch('/profile', [ProfileController::class, 'update'])
-        ->name('profile.update');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    Route::delete('/profile', [ProfileController::class, 'destroy'])
-        ->name('profile.destroy');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 /*

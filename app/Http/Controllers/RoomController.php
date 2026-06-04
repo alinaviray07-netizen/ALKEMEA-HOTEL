@@ -13,17 +13,13 @@ class RoomController extends Controller
      */
    public function index()
 {
-    $rooms = Room::where('status', 'available')
-        ->latest()
-        ->get();
-
-    $availableRoomGroups = Room::where('status', 'available')
+    $availableRoomTypes = Room::where('status', 'available')
         ->orderBy('room_type')
         ->orderBy('room_number')
         ->get()
         ->groupBy('room_type');
 
-    return view('rooms.index', compact('rooms', 'availableRoomGroups'));
+    return view('rooms.index', compact('availableRoomTypes'));
 }
     /**
      * Display all rooms for admin.
@@ -86,6 +82,22 @@ class RoomController extends Controller
     {
         return view('rooms.show', compact('room'));
     }
+
+    public function showByType($roomType)
+{
+    $rooms = Room::where('room_type', $roomType)
+        ->where('status', 'available')
+        ->orderBy('room_number')
+        ->get();
+
+    if ($rooms->isEmpty()) {
+        abort(404);
+    }
+
+    $roomSample = $rooms->first();
+
+    return view('rooms.type-show', compact('rooms', 'roomType', 'roomSample'));
+}
 
     /**
      * Show the form for editing the specified room.
