@@ -90,6 +90,8 @@ POST /api/payments
 PATCH /api/payments/{payment}  
 DELETE /api/payments/{payment}
 
+# LINK OF DEPLOYMENT USING RENDER - https://alkemea-hotel.onrender.com/
+
 ## Setup Instructions
 
 1. Clone the repository:
