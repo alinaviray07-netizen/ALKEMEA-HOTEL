@@ -24,6 +24,11 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN npm install && npm run build
 
+RUN mkdir -p /var/www/html/storage/framework/sessions \
+    /var/www/html/storage/framework/views \
+    /var/www/html/storage/framework/cache \
+    /var/www/html/bootstrap/cache
+
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 RUN a2enmod rewrite
