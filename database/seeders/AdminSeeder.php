@@ -16,7 +16,7 @@ class AdminSeeder extends Seeder
                 'name' => 'Admin',
                 'password' => Hash::make('admin12345'),
                 'role' => 'admin',
-                'api_token' => 'LdAYhxgBCKBIcBlw4UnugkEnVt1cSryKFVR7mYlr1YXZYyvCAc...',
+                'api_token' => 'LdAYhxgBCKBIcBlw4UnugkEnVt1cSryKFVR7mYlr1YXZYyvCAcSBN2mtTmhp',
             ]
         );
 
