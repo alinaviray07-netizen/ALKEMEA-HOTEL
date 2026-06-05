@@ -1,7 +1,8 @@
 <?php
+
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\RoomImportController;
-use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\PaymentController;
@@ -16,8 +17,13 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', [RoomController::class, 'index'])->name('home');
-Route::get('/rooms/type/{roomType}', [RoomController::class, 'showByType'])->name('rooms.type.show');
-Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
+
+Route::get('/rooms/type/{roomType}', [RoomController::class, 'showByType'])
+    ->name('rooms.type.show');
+
+Route::get('/rooms/{room}', [RoomController::class, 'show'])
+    ->name('rooms.show');
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard Redirect
@@ -34,26 +40,42 @@ Route::get('/dashboard', function () {
     return redirect()->route('reservations.index');
 })->middleware(['auth'])->name('dashboard');
 
-/*Guest Routes*/
+/*
+|--------------------------------------------------------------------------
+| Guest Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/my-reservations', [ReservationController::class, 'index'])->name('reservations.index');
+    Route::get('/my-reservations', [ReservationController::class, 'index'])
+        ->name('reservations.index');
 
-    Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
+    Route::get('/reservations/create', [ReservationController::class, 'create'])
+        ->name('reservations.create');
 
-    Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
+    Route::post('/reservations', [ReservationController::class, 'store'])
+        ->name('reservations.store');
 
-    Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
+    Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])
+        ->name('reservations.show');
 
-    Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+    Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])
+        ->name('reservations.destroy');
 
-    /*Breeze Profile Routes */
+    /*
+    |--------------------------------------------------------------------------
+    | Breeze Profile Routes
+    |--------------------------------------------------------------------------
+    */
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
 
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
 
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
 /*
@@ -66,6 +88,7 @@ Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+
         /*
         |--------------------------------------------------------------------------
         | Admin Dashboard
@@ -98,6 +121,18 @@ Route::middleware(['auth', 'admin'])
 
         Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])
             ->name('rooms.destroy');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Admin Room Import
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/rooms/import', [RoomImportController::class, 'create'])
+            ->name('rooms.import.form');
+
+        Route::post('/rooms/import', [RoomImportController::class, 'store'])
+            ->name('rooms.import');
 
         /*
         |--------------------------------------------------------------------------
@@ -138,25 +173,11 @@ Route::middleware(['auth', 'admin'])
         |--------------------------------------------------------------------------
         */
 
+        Route::get('/reports', [AdminController::class, 'reports'])
+            ->name('reports');
+
         Route::get('/reports/export/{type}/{format}', [ReportController::class, 'export'])
-    ->name('reports.export');
-
-Route::get('/rooms/import', [RoomImportController::class, 'create'])
-    ->name('rooms.import.form');
-
-Route::post('/rooms/import', [RoomImportController::class, 'store'])
-    ->name('rooms.import');
+            ->name('reports.export');
     });
-
-    Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
-
-Route::get('/reports/export/{type}/{format}', [ReportController::class, 'export'])
-    ->name('reports.export');
-
-Route::get('/rooms/import', [RoomImportController::class, 'create'])
-    ->name('rooms.import.form');
-
-Route::post('/rooms/import', [RoomImportController::class, 'store'])
-    ->name('rooms.import');
 
 require __DIR__.'/auth.php';
