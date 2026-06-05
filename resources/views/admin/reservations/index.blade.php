@@ -83,7 +83,9 @@
 
                             <td class="border p-3">
                                 @if($reservation->status === 'pending')
-                                    <div class="flex flex-col gap-3">
+                                    <div class="flex flex-col gap-2">
+
+                                        {{-- Approve Button --}}
                                         <form action="{{ route('admin.reservations.approve', $reservation) }}"
                                               method="POST">
                                             @csrf
@@ -97,24 +99,51 @@
                                             </button>
                                         </form>
 
-                                        <form action="{{ route('admin.reservations.reject', $reservation) }}"
-                                              method="POST">
-                                            @csrf
-                                            @method('PATCH')
+                                        {{-- Reject Button --}}
+                                        <button type="button"
+                                                class="luxury-btn-navy"
+                                                style="border:none; cursor:pointer;"
+                                                onclick="showRejectCard({{ $reservation->id }})">
+                                            Reject
+                                        </button>
 
-                                            <textarea name="rejection_reason"
-                                                      rows="3"
-                                                      class="w-full border p-2 rounded mb-2"
-                                                      placeholder="Enter reason for rejection..."
-                                                      required></textarea>
+                                        {{-- Reject Reason Card --}}
+                                        <div id="reject-card-{{ $reservation->id }}"
+                                             class="hidden mt-3 p-4 rounded border"
+                                             style="background:#F8F6F0; border-color:#D4AF37; min-width:260px;">
 
-                                            <button type="submit"
-                                                    class="luxury-btn-navy"
-                                                    style="border:none; cursor:pointer;"
-                                                    onclick="return confirm('Reject this reservation?')">
-                                                Reject
-                                            </button>
-                                        </form>
+                                            <h4 class="font-bold mb-2" style="color:#0B1F3A;">
+                                                Reason for Rejection
+                                            </h4>
+
+                                            <form action="{{ route('admin.reservations.reject', $reservation) }}"
+                                                  method="POST">
+                                                @csrf
+                                                @method('PATCH')
+
+                                                <textarea name="rejection_reason"
+                                                          rows="3"
+                                                          class="w-full border p-2 rounded mb-3"
+                                                          placeholder="Example: Room is unavailable due to maintenance."
+                                                          required></textarea>
+
+                                                <div class="flex gap-2">
+                                                    <button type="submit"
+                                                            class="luxury-btn-navy"
+                                                            style="border:none; cursor:pointer;"
+                                                            onclick="return confirm('Reject this reservation?')">
+                                                        Submit Reason
+                                                    </button>
+
+                                                    <button type="button"
+                                                            class="luxury-btn"
+                                                            style="border:none; cursor:pointer;"
+                                                            onclick="hideRejectCard({{ $reservation->id }})">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 @elseif($reservation->status === 'approved')
                                     <span class="text-green-700 font-bold">Approved</span>
@@ -145,4 +174,22 @@
         </div>
     </div>
 </div>
+
+<script>
+    function showRejectCard(id) {
+        const card = document.getElementById('reject-card-' + id);
+
+        if (card) {
+            card.classList.remove('hidden');
+        }
+    }
+
+    function hideRejectCard(id) {
+        const card = document.getElementById('reject-card-' + id);
+
+        if (card) {
+            card.classList.add('hidden');
+        }
+    }
+</script>
 @endsection
