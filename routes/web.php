@@ -151,6 +151,16 @@ Route::middleware(['auth', 'admin'])
 
         /*
         |--------------------------------------------------------------------------
+        | POST fallback for Reject Reservation
+        | This makes reject work even if the form does not use @method('PATCH')
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/reservations/{reservation}/reject', [ReservationController::class, 'reject'])
+            ->name('reservations.reject.post');
+
+        /*
+        |--------------------------------------------------------------------------
         | Admin Payment Management
         |--------------------------------------------------------------------------
         */
