@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\Room;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Response;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -41,17 +42,17 @@ class ReportController extends Controller
                 ->get()
                 ->map(fn ($reservation) => [
                     'Reservation ID' => $reservation->id,
-                    'Guest' => $reservation->user->name ?? 'N/A',
-                    'Email' => $reservation->user->email ?? 'N/A',
-                    'Room Number' => $reservation->room->room_number ?? 'N/A',
-                    'Room Type' => $reservation->room->room_type ?? 'N/A',
+                    'Guest' => $reservation->user?->name ?? 'N/A',
+                    'Email' => $reservation->user?->email ?? 'N/A',
+                    'Room Number' => $reservation->room?->room_number ?? 'N/A',
+                    'Room Type' => $reservation->room?->room_type ?? 'N/A',
                     'Check In' => $reservation->check_in_date,
                     'Check Out' => $reservation->check_out_date,
                     'Total Price' => $reservation->total_price,
                     'Reservation Status' => $reservation->status,
                     'Rejection Reason' => $reservation->rejection_reason ?? 'N/A',
-                    'Payment Method' => $reservation->payment->payment_method ?? 'N/A',
-                    'Payment Status' => $reservation->payment->status ?? 'N/A',
+                    'Payment Method' => $reservation->payment?->payment_method ?? 'N/A',
+                    'Payment Status' => $reservation->payment?->status ?? 'N/A',
                 ])
                 ->toArray();
         }
@@ -62,9 +63,9 @@ class ReportController extends Controller
                 ->get()
                 ->map(fn ($payment) => [
                     'Payment ID' => $payment->id,
-                    'Guest' => $payment->reservation->user->name ?? 'N/A',
-                    'Room Number' => $payment->reservation->room->room_number ?? 'N/A',
-                    'Room Type' => $payment->reservation->room->room_type ?? 'N/A',
+                    'Guest' => $payment->reservation?->user?->name ?? 'N/A',
+                    'Room Number' => $payment->reservation?->room?->room_number ?? 'N/A',
+                    'Room Type' => $payment->reservation?->room?->room_type ?? 'N/A',
                     'Amount' => $payment->amount,
                     'Payment Method' => $payment->payment_method,
                     'Account Name' => $payment->payment_account_name ?? 'N/A',
@@ -128,7 +129,8 @@ class ReportController extends Controller
             $headers = array_keys($data[0]);
 
             foreach ($headers as $index => $header) {
-                $sheet->setCellValueByColumnAndRow($index + 1, 1, $header);
+                $columnLetter = Coordinate::stringFromColumnIndex($index + 1);
+                $sheet->setCellValue($columnLetter . '1', $header);
             }
 
             $rowNumber = 2;
@@ -137,12 +139,15 @@ class ReportController extends Controller
                 $columnNumber = 1;
 
                 foreach ($row as $value) {
-                    $sheet->setCellValueByColumnAndRow($columnNumber, $rowNumber, $value);
+                    $columnLetter = Coordinate::stringFromColumnIndex($columnNumber);
+                    $sheet->setCellValue($columnLetter . $rowNumber, $value);
                     $columnNumber++;
                 }
 
                 $rowNumber++;
             }
+        } else {
+            $sheet->setCellValue('A1', 'No data available.');
         }
 
         $writer = new Xlsx($spreadsheet);
@@ -155,7 +160,7 @@ class ReportController extends Controller
 
     private function exportPdf(array $data, string $filename, string $title)
     {
-        $html = '<h2 style="text-align:center;">' . $title . '</h2>';
+        $html = '<h2 style="text-align:center;">' . e($title) . '</h2>';
         $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse: collapse; font-size: 10px;">';
 
         if (! empty($data)) {
@@ -171,7 +176,7 @@ class ReportController extends Controller
                 $html .= '<tr>';
 
                 foreach ($row as $value) {
-                    $html .= '<td>' . e($value) . '</td>';
+                    $html .= '<td>' . e((string) $value) . '</td>';
                 }
 
                 $html .= '</tr>';
