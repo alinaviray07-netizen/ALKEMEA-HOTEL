@@ -12,8 +12,8 @@ class Room extends Model
         'price',
         'capacity',
         'description',
-        'image',
         'status',
+        'image',
     ];
 
     public function reservations()
