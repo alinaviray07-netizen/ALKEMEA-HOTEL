@@ -38,7 +38,7 @@
                         <th class="border p-3 text-left">Total Price</th>
                         <th class="border p-3 text-left">Reservation Status</th>
                         <th class="border p-3 text-left">Payment Status</th>
-                        <th class="border p-3 text-left">Option</th>
+                        <th class="border p-3 text-left">Options</th>
                     </tr>
                 </thead>
 
