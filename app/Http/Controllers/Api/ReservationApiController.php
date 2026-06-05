@@ -18,6 +18,16 @@ class ReservationApiController extends Controller
         ]);
     }
 
+    public function show(Reservation $reservation)
+    {
+        $reservation->load(['user', 'room', 'payment']);
+
+        return response()->json([
+            'message' => 'Reservation fetched successfully.',
+            'data' => $reservation,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

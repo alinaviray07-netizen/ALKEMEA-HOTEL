@@ -16,6 +16,16 @@ class PaymentApiController extends Controller
         ]);
     }
 
+    public function show(Payment $payment)
+    {
+        $payment->load(['reservation.user', 'reservation.room']);
+
+        return response()->json([
+            'message' => 'Payment fetched successfully.',
+            'data' => $payment,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
