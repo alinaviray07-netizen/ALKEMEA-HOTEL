@@ -9,6 +9,7 @@ Route::get('/rooms', [RoomApiController::class, 'index']);
 Route::get('/rooms/{room}', [RoomApiController::class, 'show']);
 
 Route::middleware('admin.token')->group(function () {
+
     Route::post('/rooms', [RoomApiController::class, 'store']);
     Route::patch('/rooms/{room}', [RoomApiController::class, 'update']);
     Route::delete('/rooms/{room}', [RoomApiController::class, 'destroy']);
@@ -22,4 +23,5 @@ Route::middleware('admin.token')->group(function () {
     Route::post('/payments', [PaymentApiController::class, 'store']);
     Route::patch('/payments/{payment}', [PaymentApiController::class, 'update']);
     Route::delete('/payments/{payment}', [PaymentApiController::class, 'destroy']);
+
 });
