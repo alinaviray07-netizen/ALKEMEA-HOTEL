@@ -3,6 +3,7 @@
 @section('content')
 <div class="luxury-page">
     <div class="max-w-7xl mx-auto py-8 px-4">
+
         <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
             <div>
                 <h1 class="luxury-heading text-3xl">Manage Rooms</h1>
@@ -10,13 +11,16 @@
                     Manage room details, rates, capacity, and availability.
                 </p>
             </div>
-            <a href="{{ route('admin.rooms.import.form') }}" class="btn-navy">
-    Import Rooms
-</a>
 
-            <a href="{{ route('admin.rooms.create') }}" class="btn-luxury">
-                Add Room
-            </a>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('admin.rooms.import.form') }}" class="btn-navy">
+                    Import Rooms
+                </a>
+
+                <a href="{{ route('admin.rooms.create') }}" class="btn-luxury">
+                    Add Room
+                </a>
+            </div>
         </div>
 
         @if(session('success'))
@@ -25,9 +29,15 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="mb-4 p-4 rounded bg-red-100 text-red-700">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="luxury-card p-6">
-            <div class="table-wrapper">
-                <table class="luxury-table">
+            <div class="table-wrapper overflow-x-auto">
+                <table class="luxury-table w-full">
                     <thead>
                         <tr>
                             <th>Room Number</th>
@@ -49,12 +59,14 @@
                                 <td>{{ ucfirst($room->status) }}</td>
 
                                 <td>
-                                    <div class="table-actions">
+                                    <div class="table-actions flex flex-wrap gap-2">
                                         <a href="{{ route('admin.rooms.edit', $room) }}" class="btn-navy">
                                             Edit
                                         </a>
 
-                                        <form action="{{ route('admin.rooms.destroy', $room) }}" method="POST" onsubmit="return confirm('Delete this room?')">
+                                        <form action="{{ route('admin.rooms.destroy', $room) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('Delete this room?')">
                                             @csrf
                                             @method('DELETE')
 
@@ -67,7 +79,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">
+                                <td colspan="6" class="text-center p-4">
                                     No rooms available.
                                 </td>
                             </tr>
