@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\Room;
-use App\Models\Payment;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -13,46 +12,31 @@ class ReservationApiController extends Controller
 {
     public function index()
     {
-        $reservations = Reservation::with(['user', 'room', 'payment'])->latest()->get();
-
         return response()->json([
             'message' => 'Reservations fetched successfully.',
-            'data' => $reservations,
+            'data' => Reservation::with(['user', 'room', 'payment'])->latest()->get(),
         ]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'user_id' => 'required|exists:users,id',
             'room_id' => 'required|exists:rooms,id',
             'check_in_date' => 'required|date',
             'check_out_date' => 'required|date|after:check_in_date',
+            'status' => 'nullable|in:pending,approved,rejected,cancelled',
         ]);
 
-        $room = Room::findOrFail($request->room_id);
+        $room = Room::findOrFail($data['room_id']);
 
-        $checkIn = Carbon::parse($request->check_in_date);
-        $checkOut = Carbon::parse($request->check_out_date);
-        $nights = $checkIn->diffInDays($checkOut);
-        $totalPrice = $nights * $room->price;
+        $checkIn = Carbon::parse($data['check_in_date']);
+        $checkOut = Carbon::parse($data['check_out_date']);
 
-        $reservation = Reservation::create([
-            'user_id' => $request->user_id,
-            'room_id' => $request->room_id,
-            'check_in_date' => $request->check_in_date,
-            'check_out_date' => $request->check_out_date,
-            'total_price' => $totalPrice,
-            'status' => 'pending',
-        ]);
+        $data['total_price'] = $checkIn->diffInDays($checkOut) * $room->price;
+        $data['status'] = $data['status'] ?? 'pending';
 
-        Payment::create([
-            'reservation_id' => $reservation->id,
-            'amount' => $totalPrice,
-            'payment_method' => 'cash',
-            'status' => 'unpaid',
-            'payment_date' => null,
-        ]);
+        $reservation = Reservation::create($data);
 
         return response()->json([
             'message' => 'Reservation created successfully.',
@@ -62,13 +46,12 @@ class ReservationApiController extends Controller
 
     public function update(Request $request, Reservation $reservation)
     {
-        $request->validate([
-            'status' => 'required|in:pending,approved,rejected,cancelled,completed',
+        $data = $request->validate([
+            'status' => 'sometimes|required|in:pending,approved,rejected,cancelled',
+            'rejection_reason' => 'nullable|string|max:1000',
         ]);
 
-        $reservation->update([
-            'status' => $request->status,
-        ]);
+        $reservation->update($data);
 
         return response()->json([
             'message' => 'Reservation updated successfully.',

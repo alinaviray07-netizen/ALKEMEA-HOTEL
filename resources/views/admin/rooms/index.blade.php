@@ -10,6 +10,9 @@
                     Manage room details, rates, capacity, and availability.
                 </p>
             </div>
+            <a href="{{ route('admin.rooms.import.form') }}" class="btn-navy">
+    Import Rooms
+</a>
 
             <a href="{{ route('admin.rooms.create') }}" class="btn-luxury">
                 Add Room

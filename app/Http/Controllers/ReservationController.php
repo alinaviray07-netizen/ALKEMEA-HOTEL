@@ -57,7 +57,38 @@ class ReservationController extends Controller
             'check_in_date' => 'required|date|after_or_equal:today',
             'check_out_date' => 'required|date|after:check_in_date',
             'payment_method' => 'required|in:cash,gcash,bank transfer,card',
+
+            'payment_account_name' => 'nullable|string|max:255',
+            'payment_account_number' => 'nullable|string|max:255',
+            'bank_name' => 'nullable|string|max:255',
+            'payment_reference' => 'nullable|string|max:255',
+            'card_last_four' => 'nullable|string|max:4',
+            'payment_note' => 'nullable|string|max:1000',
         ]);
+
+        if ($request->payment_method === 'gcash') {
+            $request->validate([
+                'payment_account_name' => 'required|string|max:255',
+                'payment_account_number' => 'required|string|max:255',
+                'payment_reference' => 'required|string|max:255',
+            ]);
+        }
+
+        if ($request->payment_method === 'bank transfer') {
+            $request->validate([
+                'bank_name' => 'required|string|max:255',
+                'payment_account_name' => 'required|string|max:255',
+                'payment_account_number' => 'required|string|max:255',
+                'payment_reference' => 'required|string|max:255',
+            ]);
+        }
+
+        if ($request->payment_method === 'card') {
+            $request->validate([
+                'payment_account_name' => 'required|string|max:255',
+                'card_last_four' => 'required|string|size:4',
+            ]);
+        }
 
         $room = Room::findOrFail($request->room_id);
 
@@ -68,7 +99,6 @@ class ReservationController extends Controller
         $checkIn = Carbon::parse($request->check_in_date);
         $checkOut = Carbon::parse($request->check_out_date);
         $nights = $checkIn->diffInDays($checkOut);
-
         $totalPrice = $nights * $room->price;
 
         $reservation = Reservation::create([
@@ -78,12 +108,19 @@ class ReservationController extends Controller
             'check_out_date' => $request->check_out_date,
             'total_price' => $totalPrice,
             'status' => 'pending',
+            'rejection_reason' => null,
         ]);
 
         Payment::create([
             'reservation_id' => $reservation->id,
             'amount' => $totalPrice,
             'payment_method' => $request->payment_method,
+            'payment_account_name' => $request->payment_account_name,
+            'payment_account_number' => $request->payment_account_number,
+            'bank_name' => $request->bank_name,
+            'payment_reference' => $request->payment_reference,
+            'card_last_four' => $request->card_last_four,
+            'payment_note' => $request->payment_note,
             'status' => 'unpaid',
             'payment_date' => null,
         ]);
@@ -150,6 +187,7 @@ class ReservationController extends Controller
 
         $reservation->update([
             'status' => 'approved',
+            'rejection_reason' => null,
         ]);
 
         if ($reservation->payment) {
@@ -170,12 +208,17 @@ class ReservationController extends Controller
             ->with('success', 'Reservation approved successfully. The room is now unavailable.');
     }
 
-    public function reject(Reservation $reservation)
+    public function reject(Request $request, Reservation $reservation)
     {
+        $request->validate([
+            'rejection_reason' => 'required|string|max:1000',
+        ]);
+
         $reservation->load(['room', 'payment']);
 
         $reservation->update([
             'status' => 'rejected',
+            'rejection_reason' => $request->rejection_reason,
         ]);
 
         if ($reservation->payment) {
@@ -193,6 +236,6 @@ class ReservationController extends Controller
 
         return redirect()
             ->route('admin.reservations.index')
-            ->with('success', 'Reservation rejected successfully. The room is available again.');
+            ->with('success', 'Reservation rejected successfully. Reason has been sent to the user.');
     }
 }

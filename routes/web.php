@@ -1,5 +1,6 @@
 <?php
-
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\RoomImportController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ReservationController;
@@ -137,11 +138,14 @@ Route::middleware(['auth', 'admin'])
         |--------------------------------------------------------------------------
         */
 
-        Route::get('/reports/export/json', [AdminController::class, 'exportJson'])
-            ->name('reports.export.json');
+        Route::get('/reports/export/{type}/{format}', [ReportController::class, 'export'])
+    ->name('reports.export');
 
-        Route::get('/reports', [AdminController::class, 'reports'])
-            ->name('reports');
+Route::get('/rooms/import', [RoomImportController::class, 'create'])
+    ->name('rooms.import.form');
+
+Route::post('/rooms/import', [RoomImportController::class, 'store'])
+    ->name('rooms.import');
     });
 
 require __DIR__.'/auth.php';

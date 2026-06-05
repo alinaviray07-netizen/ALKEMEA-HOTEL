@@ -13,9 +13,10 @@ class AdminSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@gmail.com'],
             [
-                'name' => 'System Admin',
+                'name' => 'Admin',
                 'password' => Hash::make('admin12345'),
                 'role' => 'admin',
+                'api_token' => 'LdAYhxgBCKBIcBlw4UnugkEnVt1cSryKFVR7mYlr1YXZYyvCAcSBN2mtTmhp',
             ]
         );
 
