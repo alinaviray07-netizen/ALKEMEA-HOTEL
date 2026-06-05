@@ -148,4 +148,15 @@ Route::post('/rooms/import', [RoomImportController::class, 'store'])
     ->name('rooms.import');
     });
 
+    Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
+
+Route::get('/reports/export/{type}/{format}', [ReportController::class, 'export'])
+    ->name('reports.export');
+
+Route::get('/rooms/import', [RoomImportController::class, 'create'])
+    ->name('rooms.import.form');
+
+Route::post('/rooms/import', [RoomImportController::class, 'store'])
+    ->name('rooms.import');
+
 require __DIR__.'/auth.php';
