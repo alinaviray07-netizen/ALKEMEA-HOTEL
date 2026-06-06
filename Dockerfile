@@ -15,6 +15,9 @@ RUN apt-get update && apt-get install -y \
     npm \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip gd \
+    && a2dismod mpm_event || true \
+    && a2dismod mpm_worker || true \
+    && a2enmod mpm_prefork \
     && a2enmod rewrite \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -37,4 +40,6 @@ RUN chown -R www-data:www-data storage bootstrap/cache public/build \
 
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-CMD ["sh", "-c", "php artisan config:clear && php artisan view:clear && php artisan route:clear && php artisan storage:link && php artisan migrate --force && php artisan db:seed --force && apache2-foreground"]
+EXPOSE 8080
+
+CMD ["sh", "-c", "sed -i \"s/Listen 80/Listen ${PORT:-8080}/\" /etc/apache2/ports.conf && sed -i \"s/<VirtualHost \\*:80>/<VirtualHost \\*:${PORT:-8080}>/\" /etc/apache2/sites-available/000-default.conf && php artisan config:clear && php artisan view:clear && php artisan route:clear && php artisan storage:link || true && php artisan migrate --force && apache2-foreground"]
