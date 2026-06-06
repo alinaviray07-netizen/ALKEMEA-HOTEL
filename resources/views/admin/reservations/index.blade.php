@@ -124,7 +124,7 @@
                                                 <textarea name="rejection_reason"
                                                           rows="3"
                                                           class="w-full border p-2 rounded mb-3"
-                                                          placeholder="Example: Room is unavailable due to maintenance."
+                                                          placeholder=""
                                                           required></textarea>
 
                                                 <div class="flex gap-2">
