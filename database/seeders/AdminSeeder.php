@@ -26,6 +26,7 @@ class AdminSeeder extends Seeder
                 'name' => 'Sample Guest',
                 'password' => Hash::make('guest12345'),
                 'role' => 'guest',
+                'api_token' => null,
             ]
         );
     }

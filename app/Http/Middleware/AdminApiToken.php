@@ -12,9 +12,9 @@ class AdminApiToken
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->bearerToken();
+        $token = trim((string) $request->bearerToken());
 
-        if (! $token) {
+        if ($token === '') {
             return response()->json([
                 'message' => 'Missing bearer token.',
             ], 401);
@@ -25,6 +25,7 @@ class AdminApiToken
         if (! $user) {
             return response()->json([
                 'message' => 'Invalid API token.',
+                'hint' => 'The token you entered does not match any api_token in the users table.',
             ], 401);
         }
 
