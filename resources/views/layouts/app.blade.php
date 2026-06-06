@@ -123,6 +123,56 @@
             color: var(--gold) !important;
         }
 
+        .luxury-btn {
+    background-color: var(--gold) !important;
+    color: var(--navy) !important;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 78px;
+    height: 38px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.luxury-btn:hover {
+    background-color: var(--light-gold) !important;
+    color: var(--dark-navy) !important;
+}
+
+.luxury-btn-navy {
+    background-color: var(--navy) !important;
+    color: white !important;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 78px;
+    height: 38px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.luxury-btn-navy:hover {
+    background-color: var(--dark-navy) !important;
+    color: var(--gold) !important;
+}
+
         .table-wrapper {
             width: 100%;
             overflow-x: auto;
