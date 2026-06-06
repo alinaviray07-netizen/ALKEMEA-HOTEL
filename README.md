@@ -90,7 +90,7 @@ POST /api/payments
 PATCH /api/payments/{payment}  
 DELETE /api/payments/{payment}
 
-# LINK OF DEPLOYMENT USING RENDER - https://alkemea-hotel.onrender.com/
+# LINK OF DEPLOYMENT USING RAILWAY- https://alkemea-hotel-production.up.railway.app/
 # LOCAL, LARAVEL LINK - http://127.0.0.1:8000/
 
 ## Setup Instructions
