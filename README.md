@@ -92,6 +92,7 @@ DELETE /api/payments/{payment}
 
 # LINK OF DEPLOYMENT USING RAILWAY- https://alkemea-hotel-production.up.railway.app/
 # LOCAL, LARAVEL LINK - http://127.0.0.1:8000/
+# TESTING THE DEPLOYMENT OF OUR SYSTEM USING RAILWAY AND ALSO THE API TESTING (G DRIVE LINK) - https://drive.google.com/file/d/1weJxRJ3Ypat63zi9j_SesUb124vIby05/view?usp=drive_link
 
 ## Setup Instructions
 
