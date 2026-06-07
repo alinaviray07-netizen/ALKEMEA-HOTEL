@@ -77,17 +77,17 @@ Password:
 ### Rooms
 GET /api/rooms  
 GET /api/rooms/{room}
+GET /api/reservations
 
 ### Reservations
 GET /api/reservations  
 POST /api/reservations  
-PATCH /api/reservations/{reservation}  
+
 DELETE /api/reservations/{reservation}
 
 ### Payments
 GET /api/payments  
 POST /api/payments  
-PATCH /api/payments/{payment}  
 DELETE /api/payments/{payment}
 
 # LINK OF DEPLOYMENT USING RAILWAY- https://alkemea-hotel-production.up.railway.app/
